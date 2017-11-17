@@ -55,8 +55,8 @@ class VnexpressSpider(scrapy.Spider):
         urls = xml.xpath('//urlset/url')
 
         for url in urls:
-            time = url.xpath('./news/publication_date/text()').extract()[0]
-            link = url.xpath('./loc/text()').extract()[0]
+            time = url.xpath('./news/publication_date/text()').extract_first()
+            link = url.xpath('./loc/text()').extract_first()
             if self.visited_url(url=link, time=time):
                 continue
                 
@@ -66,18 +66,18 @@ class VnexpressSpider(scrapy.Spider):
             yield request
 
     def parse_news(self, response):
-        title = response.css('h1.title_news_detail')[0].xpath('text()').extract()[0]
+        title = response.css('h1.title_news_detail')[0].xpath('text()').extract_first()
         title = self.remove_scpecial_characters(title)
-        description = response.css('h2.description')[0].xpath('text()').extract()[0]
+        description = response.css('h2.description')[0].xpath('text()').extract_first()
         description = self.remove_scpecial_characters(description)
         article_content = response.css('article.content_detail')
         content = ''
         if (len(article_content) > 0):
             paragraphs = article_content.css('p:not(.Image)')
             for p in paragraphs:
-                text = p.xpath('text()').extract()
-                if (len(text) != 0):
-                    content += self.remove_scpecial_characters(text[0])
+                text = p.xpath('text()').extract_first()
+                if text != None:
+                    content += self.remove_scpecial_characters(text)
         
         # content = content.strip()
 
