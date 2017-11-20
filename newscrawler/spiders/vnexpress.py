@@ -80,7 +80,7 @@ class VnexpressSpider(scrapy.Spider):
         time = re.sub(r'[^0-9]', '_', time)
         folder = '{}/{}'.format(self.folder, time[:10])
         file_name = '{}/{}__{}.json'.format(folder, title, time)
-        return os.path.exists(folder)
+        return os.path.exists(file_name)
 
     def write_to_file(self, data):
         title = re.sub(r'[^A-Za-z0-9]', '_', data['url'].split('/')[-1][:20])

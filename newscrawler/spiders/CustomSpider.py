@@ -41,3 +41,10 @@ class CustomSpider(scrapy.Spider):
         file_name = '{}/{}__{}.json'.format(folder, title, time)
         with open(file_name, 'w', encoding="utf-8") as outfile:
             json.dump(data, outfile, ensure_ascii=False)
+
+    def visited_url(self, url, time):
+        title = re.sub(r'[^0-9]', '', url)
+        time = re.sub(r'[^0-9]', '_', time)
+        folder = '{}/{}'.format(self.folder, time[:10])
+        file_name = '{}/{}__{}.json'.format(folder, title, time)
+        return os.path.exists(file_name)
